@@ -10,3 +10,6 @@ db.once('open',function(){
 
 //model
 require('./Category');
+require('./recipe');
+
+

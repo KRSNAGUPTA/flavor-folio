@@ -1,5 +1,6 @@
 require('../model/database')
 const Category = require('../model/Category');
+const Recipe = require('../model/recipe');
 
 /*
 Get /
@@ -10,8 +11,14 @@ exports.homepage = async(req, res) => {
   try {
     const limitNumber = 5;
     const categories = await Category.find({}).limit(limitNumber);
+    const latest = await Recipe.find({}).sort({_id:-1}).limit(limitNumber);
+    const thai = await Recipe.find({'category':'Thai'}).limit(limitNumber);
+    const american = await Recipe.find({'category':'American'}).limit(limitNumber);
+    const chinese = await Recipe.find({'category':'Chinese'}).limit(limitNumber);
+    const food = { latest,american, chinese,thai};
 
-    res.render('index', { title: "Flavour Folio - Home" , categories });
+
+    res.render('index', { title: "Flavour Folio - Home" , categories,food });
   } catch (error) {
     res.status(500).send({message : error.message || "Error Occured"})
   }
@@ -35,7 +42,40 @@ exports.exploreCategories = async(req, res) => {
 };
 
 
+/*
+Get /recipe/:id
+recipe
+*/
 
+exports.exploreRecipe = async(req, res) => {
+  try {
+    let recipeId = req.params.id;
+    const recipe = await Recipe.findById(recipeId);
+    res.render('recipe', { title: "Flavour Folio - Recipe" , recipe });
+  } catch (error) {
+    res.status(500).send({message : error.message || "Error Occured"})
+  }
+};
+
+
+
+
+
+/*
+Get /categories/:id
+categories by id
+*/
+
+exports.exploreCategoriesById = async(req, res) => {
+  try {
+    let categoryId = req.params.id;
+    const limitNumber = 20;
+    const categoryById = await Recipe.find({'category':categoryId }).limit(limitNumber);
+    res.render('categories', { title: "Flavour Folio - Categories" , categoryById });
+  } catch (error) {
+    res.status(500).send({message : error.message || "Error Occured"})
+  }
+};
 
 
 
@@ -90,3 +130,39 @@ exports.exploreCategories = async(req, res) => {
 // }
 
 // insertDummyCategoryData();
+
+// async function insertDymmyRecipeData(){
+//   try {
+//     await Recipe.insertMany([
+//       { 
+//         "name": "Recipe Name Goes Here",
+//         "description": `Recipe Description Goes Here`,
+//         "email": "recipeemail@raddy.co.uk",
+//         "ingredients": [
+//           "1 level teaspoon baking powder",
+//           "1 level teaspoon cayenne pepper",
+//           "1 level teaspoon hot smoked paprika",
+//         ],
+//         "category": "American", 
+//         "image": "southern-friend-chicken.jpg"
+//       },
+//       { 
+//         "name": "Recipe Name Goes Here",
+//         "description": `Recipe Description Goes Here`,
+//         "email": "recipeemail@raddy.co.uk",
+//         "ingredients": [
+//           "1 level teaspoon baking powder",
+//           "1 level teaspoon cayenne pepper",
+//           "1 level teaspoon hot smoked paprika",
+//         ],
+//         "category": "American", 
+//         "image": "southern-friend-chicken.jpg"
+//       },
+//     ]);
+//   } catch (error) {
+//     console.log('err', + error)
+//   }
+// }
+
+// insertDymmyRecipeData();
+
