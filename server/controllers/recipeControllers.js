@@ -149,8 +149,83 @@ exports.exploreRandom = async (req, res) => {
 };
 
 
+/*
+Get /submit-recipe
+Submit Recipe
+*/
+
+exports.submitRecipe = async (req, res) => {
+  
+  const infoErrorsObj = req.flash('infoErrors');
+  const infoSubmitObj = req.flash('infoSubmit');
+  
+  res.render("submit-recipe", {
+    title: "Flavour Folio - Submit Recipe" ,infoErrorsObj , infoSubmitObj
+  });
+};
 
 
+const path = require('path');
+
+exports.submitRecipeOnPost = async (req, res) => {
+  try {
+    let imageUploadFile;
+    let uploadPath;
+    let newImageName;
+
+    if (!req.files || Object.keys(req.files).length === 0) {
+      throw new Error('No files were uploaded.');
+    } else {
+      imageUploadFile = req.files.image;
+      newImageName = Date.now() + '-' + imageUploadFile.name;
+      uploadPath = require('path').resolve('./') + '/public/uploads/' + newImageName;
+
+      await imageUploadFile.mv(uploadPath);
+    }
+
+    const newRecipe = new Recipe({
+      name: req.body.name,
+      description: req.body.description,
+      email: req.body.email,
+      ingredients: req.body.ingredients,
+      category: req.body.category,
+      image: newImageName
+    });
+
+    await newRecipe.save();
+
+    req.flash('infoSubmit', 'Your recipe has been added to Flavor Folio! Explore more flavors in the Folio.');
+    res.redirect('/submit-recipe');
+  } catch (error) {
+    console.error(error);
+    req.flash('infoError', 'An error occurred while submitting the recipe. Please try again.');
+    res.redirect('/submit-recipe');
+  }
+};
+
+
+// Delete Recipe 
+//  async function deleteRecipe(){
+//   try {
+//     await Recipe.deleteOne({ name: 'test 2' });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// deleteRecipe();
+
+
+// Update Recipe
+// async function updateRecipe(){
+//   try {
+//     const res = await Recipe.updateOne({ name: 'New Recipe' }, { name: 'New Recipe Updated' });
+//     res.n; // Number of documents matched
+//     res.nModified; // Number of documents modified
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// updateRecipe();
 
 
 // async function insertDummyCategoryData() {
