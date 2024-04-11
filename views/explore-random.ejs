@@ -1,22 +1,17 @@
-<% if (recipe !==null) { %>
-    <h1 class="pb-4">Yummy Recipe!</h1>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page"><%- recipe.name %></li>
-        </ol>
-    </nav>
+<style>
+    .rounded-lg {
+        border-radius: 1.5rem;
+        margin-bottom: 15px;
+    }
 
-    <div class="row">
+</style>
 
-        <style>
-            .rounded-lg {border-radius: 2.5rem;margin-bottom: 33px; margin-left: -12px;margin-top: 4px;}
-        </style>
+<div class="row row-cols-1 row-cols-lg-3 g-2 g-lg-3">
+    <% if (typeof recipe !== 'undefined') { %>
         <div class="col">
-            <img src="/uploads/<%- recipe.image %>" class="img-fluid sticky-top rounded-lg" style="top:20px;"
-                loading="lazy">
+            <img src="/uploads/<%- recipe.image %>" class="img-fluid sticky-top rounded-lg" style="top:20px;" loading="lazy">
         </div>
-        <div class="col-12 col-md-8">
+        <div class="col">
             <div class="row">
                 <div class="col-12">
                     <h1><%- recipe.name %></h1>
@@ -35,12 +30,10 @@
                             <li class="list-group-item">
                                 <%= ingredient %>
                             </li>
-                            <% }) %>
+                        <% }) %>
                     </ul>
                 </div>
             </div>
         </div>
-    </div>
-    <% } else { %>
-        <p>No item found 😔</p>
-        <% } %>
+    <% } %>
+</div>

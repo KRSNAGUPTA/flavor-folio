@@ -1,95 +1,152 @@
-require('../model/database')
-const Category = require('../model/Category');
-const Recipe = require('../model/recipe');
+require("../model/database");
+const Category = require("../model/Category");
+const Recipe = require("../model/recipe");
 
 /*
 Get /
 homepage
 */
 
-exports.homepage = async(req, res) => {
+exports.homepage = async (req, res) => {
   try {
     const limitNumber = 5;
     const categories = await Category.find({}).limit(limitNumber);
-    const latest = await Recipe.find({}).sort({_id:-1}).limit(limitNumber);
-    const thai = await Recipe.find({'category':'Thai'}).limit(limitNumber);
-    const american = await Recipe.find({'category':'American'}).limit(limitNumber);
-    const chinese = await Recipe.find({'category':'Chinese'}).limit(limitNumber);
-    const food = { latest,american, chinese,thai};
+    const latest = await Recipe.find({}).sort({ _id: -1 }).limit(limitNumber);
+    const thai = await Recipe.find({ category: "Thai" }).limit(limitNumber);
+    const american = await Recipe.find({ category: "American" }).limit(
+      limitNumber
+    );
+    const chinese = await Recipe.find({ category: "Chinese" }).limit(
+      limitNumber
+    );
+    const food = { latest, american, chinese, thai };
 
-
-    res.render('index', { title: "Flavour Folio - Home" , categories,food });
+    res.render("index", { title: "Flavour Folio - Home", categories, food });
   } catch (error) {
-    res.status(500).send({message : error.message || "Error Occured"})
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
 };
-
 
 /*
 Get /categories
 categories
 */
 
-exports.exploreCategories = async(req, res) => {
+exports.exploreCategories = async (req, res) => {
   try {
     const limitNumber = 20;
     const categories = await Category.find({}).limit(limitNumber);
 
-    res.render('categories', { title: "Flavour Folio - Categories" , categories });
+    res.render("categories", {
+      title: "Flavour Folio - Categories",
+      categories,
+    });
   } catch (error) {
-    res.status(500).send({message : error.message || "Error Occured"})
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
 };
-
 
 /*
 Get /recipe/:id
 recipe
 */
 
-exports.exploreRecipe = async(req, res) => {
+exports.exploreRecipe = async (req, res) => {
   try {
     let recipeId = req.params.id;
     const recipe = await Recipe.findById(recipeId);
-    res.render('recipe', { title: "Flavour Folio - Recipe" , recipe });
+    res.render("recipe", { title: "Flavour Folio - Recipe", recipe });
   } catch (error) {
-    res.status(500).send({message : error.message || "Error Occured"})
+    res.status(500).send({ message: error.message || "Error Occured" });
   }
 };
-
-
-
-
 
 /*
 Get /categories/:id
 categories by id
 */
 
-exports.exploreCategoriesById = async(req, res) => {
+exports.exploreCategoriesById = async (req, res) => {
   try {
     let categoryId = req.params.id;
     const limitNumber = 20;
-    const categoryById = await Recipe.find({'category':categoryId }).limit(limitNumber);
-    res.render('categories', { title: "Flavour Folio - Categories" , categoryById });
+    const categoryById = await Recipe.find({ category: categoryId }).limit(
+      limitNumber
+    );
+    res.render("categories", {
+      title: "Flavour Folio - Categories",
+      categoryById,
+    });
   } catch (error) {
-    res.status(500).send({message : error.message || "Error Occured"})
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
+
+/*
+Post /search
+search 
+*/
+
+exports.searchRecipe = async (req, res) => {
+  console.log("Received search request with data:", req.body);
+  try {
+    let searchTerm = req.body.sesearchTera;
+    if (!searchTerm || searchTerm.trim() === "") {
+      return res.status(400).send({ message: "Kuch type bhi toh krle!" });
+    }
+    let recipe = await Recipe.find({
+      $text: { $search: searchTerm, $diacriticSensitive: true },
+    });
+    res.render("search", { title: "Flavour Folio - Search" ,recipe });
+    console.log(recipe);
+    // Render the view only if the search was successful
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occurred" });
   }
 };
 
 
 
 
+/*
+Get /explore-latest
+explore latest
+*/
+
+exports.exploreLatest = async (req, res) => {
+  try {
+    const limitNumber = 20;
+    const recipe = await Recipe.find({}).sort({_id:-1}).limit(limitNumber)
+    res.render("explore-latest", {
+      title: "Flavour Folio - Explore Latest",
+      recipe
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
 
 
+/*
+Get /explore-random
+explore latest
+*/
 
+exports.exploreRandom = async (req, res) => {
+  try {
+    let count = await Recipe.find().countDocuments();
+    let random = Math.floor(Math.random() * count);
 
+  let recipe = await Recipe.findOne().skip(random).exec();
 
-
-
-
-
-
+    res.render("explore-random", {
+      title: "Flavour Folio - Explore Latest",
+      recipe
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message || "Error Occured" });
+  }
+};
 
 
 
@@ -134,7 +191,7 @@ exports.exploreCategoriesById = async(req, res) => {
 // async function insertDymmyRecipeData(){
 //   try {
 //     await Recipe.insertMany([
-//       { 
+//       {
 //         "name": "Recipe Name Goes Here",
 //         "description": `Recipe Description Goes Here`,
 //         "email": "recipeemail@raddy.co.uk",
@@ -143,10 +200,10 @@ exports.exploreCategoriesById = async(req, res) => {
 //           "1 level teaspoon cayenne pepper",
 //           "1 level teaspoon hot smoked paprika",
 //         ],
-//         "category": "American", 
+//         "category": "American",
 //         "image": "southern-friend-chicken.jpg"
 //       },
-//       { 
+//       {
 //         "name": "Recipe Name Goes Here",
 //         "description": `Recipe Description Goes Here`,
 //         "email": "recipeemail@raddy.co.uk",
@@ -155,7 +212,7 @@ exports.exploreCategoriesById = async(req, res) => {
 //           "1 level teaspoon cayenne pepper",
 //           "1 level teaspoon hot smoked paprika",
 //         ],
-//         "category": "American", 
+//         "category": "American",
 //         "image": "southern-friend-chicken.jpg"
 //       },
 //     ]);
@@ -165,4 +222,3 @@ exports.exploreCategoriesById = async(req, res) => {
 // }
 
 // insertDymmyRecipeData();
-

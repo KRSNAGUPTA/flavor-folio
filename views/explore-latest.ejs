@@ -1,0 +1,22 @@
+
+    <style>
+        .rounded-lg {
+            border-radius: 1.5rem;
+        }
+    </style>
+    
+    <h1 class="pb-4">Explore Latest</h1>
+    
+    <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
+        <% if (typeof recipe !== 'undefined' && recipe.length > 0) { %>
+            <% recipe.forEach(function(recipe, index) { %>
+                <a href="/recipe/<%= recipe._id %>" class="col text-center category__link">
+                    <div class="col">
+                        <img src="/uploads/<%- recipe.image %>" class="img-fluid sticky-top rounded-lg" style="top:20px;" loading="lazy">
+                    </div>
+                    <div class="pt-1"><%- recipe.name %></div>
+                </a>
+            <% }) %>
+        <% } %>
+    </div>
+    
