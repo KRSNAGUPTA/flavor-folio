@@ -12,16 +12,16 @@ exports.homepage = async (req, res) => {
     const limitNumber = 5;
     const categories = await Category.find({}).limit(limitNumber);
     const latest = await Recipe.find({}).sort({ _id: -1 }).limit(limitNumber);
+    const indian = await Recipe.find({ category: "Indian" }).limit(limitNumber);
     const thai = await Recipe.find({ category: "Thai" }).limit(limitNumber);
-    const american = await Recipe.find({ category: "American" }).limit(
-      limitNumber
-    );
-    const chinese = await Recipe.find({ category: "Chinese" }).limit(
-      limitNumber
-    );
-    const food = { latest, american, chinese, thai };
+    const american = await Recipe.find({ category: "American" }).limit(limitNumber);
+    const nepali = await Recipe.find({ category: "Nepali" }).limit(limitNumber);
+    const spanish = await Recipe.find({ category: "Spanish" }).limit(limitNumber);
+    const chinese = await Recipe.find({ category: "Chinese" }).limit(limitNumber);
+    const italian = await Recipe.find({ category: "Italian" }).limit(limitNumber);
+    const food = { latest, american, chinese, indian,thai,nepali,spanish,italian };
 
-    res.render("index", { title: "Flavour Folio - Home", categories, food });
+    res.render("index", { title: "Flavour Folio - Unleashing Taste Adventures", categories, food });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -38,7 +38,7 @@ exports.exploreCategories = async (req, res) => {
     const categories = await Category.find({}).limit(limitNumber);
 
     res.render("categories", {
-      title: "Flavour Folio - Categories",
+      title: "Flavour Folio - Taste the Variety",
       categories,
     });
   } catch (error) {
@@ -55,7 +55,7 @@ exports.exploreRecipe = async (req, res) => {
   try {
     let recipeId = req.params.id;
     const recipe = await Recipe.findById(recipeId);
-    res.render("recipe", { title: "Flavour Folio - Recipe", recipe });
+    res.render("recipe", { title: "Flavour Folio - Flavourful Journeys", recipe });
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occured" });
   }
@@ -74,7 +74,7 @@ exports.exploreCategoriesById = async (req, res) => {
       limitNumber
     );
     res.render("categories", {
-      title: "Flavour Folio - Categories",
+      title: "Flavour Folio - Taste the Variety",
       categoryById,
     });
   } catch (error) {
@@ -97,7 +97,7 @@ exports.searchRecipe = async (req, res) => {
     let recipe = await Recipe.find({
       $text: { $search: searchTerm, $diacriticSensitive: true },
     });
-    res.render("search", { title: "Flavour Folio - Search" ,recipe });
+    res.render("search", { title: "Flavour Folio - Discover Deliciousness" ,recipe });
     console.log(recipe);
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occurred" });
@@ -117,7 +117,7 @@ exports.exploreLatest = async (req, res) => {
     const limitNumber = 20;
     const recipe = await Recipe.find({}).sort({_id:-1}).limit(limitNumber)
     res.render("explore-latest", {
-      title: "Flavour Folio - Explore Latest",
+      title: "Flavour Folio - Explore the Latest Flavour Stories",
       recipe
     });
   } catch (error) {
@@ -139,7 +139,7 @@ exports.exploreRandom = async (req, res) => {
   let recipe = await Recipe.findOne().skip(random).exec();
 
     res.render("explore-random", {
-      title: "Flavour Folio - Explore Latest",
+      title: "Flavour Folio - A Taste of Serendipity",
       recipe
     });
   } catch (error) {
@@ -159,7 +159,33 @@ exports.submitRecipe = async (req, res) => {
   const infoSubmitObj = req.flash('infoSubmit');
   
   res.render("submit-recipe", {
-    title: "Flavour Folio - Submit Recipe" ,infoErrorsObj , infoSubmitObj
+    title: "Flavour Folio -> Share Your Flavour Adventure" ,infoErrorsObj , infoSubmitObj
+  });
+};
+
+
+/*
+Get /about
+getAbout
+*/
+
+exports.getAbout = async (req, res) => {
+  
+  res.render("about", {
+    title: "Flavour Folio -> about us" 
+  });
+};
+
+
+/*
+Get /contact
+getContact
+*/
+
+exports.getContact = async (req, res) => {
+  
+  res.render("contact", {
+    title: "Flavour Folio -> about us" 
   });
 };
 
@@ -190,7 +216,7 @@ exports.submitRecipeOnPost = async (req, res) => {
       category: req.body.category,
       image: newImageName
     });
-    
+
     console.log(newRecipe);
     await newRecipe.save();
 
