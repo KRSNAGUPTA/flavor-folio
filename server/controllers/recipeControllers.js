@@ -99,7 +99,6 @@ exports.searchRecipe = async (req, res) => {
     });
     res.render("search", { title: "Flavour Folio - Search" ,recipe });
     console.log(recipe);
-    // Render the view only if the search was successful
   } catch (error) {
     res.status(500).send({ message: error.message || "Error Occurred" });
   }
@@ -185,13 +184,14 @@ exports.submitRecipeOnPost = async (req, res) => {
 
     const newRecipe = new Recipe({
       name: req.body.name,
-      description: req.body.description,
+      instruction: req.body.instruction,
       email: req.body.email,
       ingredients: req.body.ingredients,
       category: req.body.category,
       image: newImageName
     });
-
+    
+    console.log(newRecipe);
     await newRecipe.save();
 
     req.flash('infoSubmit', 'Your recipe has been added to Flavor Folio! Explore more flavors in the Folio.');
@@ -207,7 +207,7 @@ exports.submitRecipeOnPost = async (req, res) => {
 // Delete Recipe 
 //  async function deleteRecipe(){
 //   try {
-//     await Recipe.deleteOne({ name: 'test 2' });
+//     await Recipe.deleteOne({ name: 'Southern fried Chicken' });
 //   } catch (error) {
 //     console.log(error);
 //   }
@@ -268,7 +268,7 @@ exports.submitRecipeOnPost = async (req, res) => {
 //     await Recipe.insertMany([
 //       {
 //         "name": "Recipe Name Goes Here",
-//         "description": `Recipe Description Goes Here`,
+//         "instruction": `Recipe instruction Goes Here`,
 //         "email": "recipeemail@raddy.co.uk",
 //         "ingredients": [
 //           "1 level teaspoon baking powder",
@@ -280,7 +280,7 @@ exports.submitRecipeOnPost = async (req, res) => {
 //       },
 //       {
 //         "name": "Recipe Name Goes Here",
-//         "description": `Recipe Description Goes Here`,
+//         "instruction": `Recipe instruction Goes Here`,
 //         "email": "recipeemail@raddy.co.uk",
 //         "ingredients": [
 //           "1 level teaspoon baking powder",
