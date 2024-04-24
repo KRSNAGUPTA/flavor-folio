@@ -27,10 +27,6 @@ To run this project locally, follow these steps:
 
 You can also explore Flavor Folio online by visiting [Flavor Folio on Render](https://flavor-folio.onrender.com/).
 
-## Contributing
-
-Contributions are welcome! If you have any ideas for improvements or new features, feel free to open an issue or submit a pull request. Please adhere to the [Contributing Guidelines](CONTRIBUTING.md).
-
 
 ## Acknowledgements
 
