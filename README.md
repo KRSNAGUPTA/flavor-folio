@@ -28,18 +28,4 @@ To run this project locally, follow these steps:
 You can also explore Flavor Folio online by visiting [Flavor Folio on Render](https://flavor-folio.onrender.com/).
 
 
-## Acknowledgements
-
-- Bootstrap - for the responsive design framework.
-- Express - for the web application framework for Node.js.
-- EJS - for the Embedded JavaScript templating.
-- Font Awesome - for the icons used in the project.
-
-## Contact
-
-If you have any questions or feedback, feel free to reach out:
-
-- Email: up.krishnagupta@gmail.com
-- LinkedIn: [Krishna Gupta](https://www.linkedin.com/in/krishnaagupta/)
-
 Enjoy exploring the flavors of the world with Flavor Folio!
