@@ -17,7 +17,7 @@ Flavor Folio is a project aimed at providing a platform for sharing and discover
 
 To run this project locally, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/flavor-folio.git`
+1. Clone the repository: `git clone https://github.com/KRSNAGUPTA/flavor-folio.git`
 2. Navigate to the project directory: `cd flavor-folio`
 3. Install dependencies: `npm install`
 4. Start the server: `npm start`
