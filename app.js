@@ -31,5 +31,5 @@ const routes = require("./routes/recipeRoutes");
 app.use("/", routes);
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  console.log(`Listening on port ${port} \nhttp://localhost:3000/`);
 });
